@@ -1,16 +1,19 @@
-TITLE="Internet Outage Logger Script v5.0 - 2011/09/05"
+TITLE="Internet Outage Logger Script v5.1 - 2014/02/02"
 # Written By: AustinSaintAubin@gmail.com
-# https://docs.google.com/document/d/1gcVKuAm4hCaH_wC6DcrtO36cdAdb6EdATAZwvt5do1k/edit?hl=en_US&authkey=COTh8bED
-# PingLEDStatus.sh "led" "IP"
-# sh $(nvram get usb_disk_main)/Tomato/Scripts/Connection_Logger_and_Status_Script.sh "$(nvram get wan_gateway)" "white"
+# sh "/mnt/usb8gb/active_system/scripts/logging/internet_outage_logger.sh" "$(nvram get wan_gateway)" "5g"
 # ====================================================================================================
+# [# Global Static Variables #]
+SCRIPT_DIRECTORY="$(dirname $0)"
+SCRIPTS_DIRECTORY="$(dirname "$SCRIPT_DIRECTORY")"  # Scripts Root Directory
+SCRIPTS_DEPENDENCIES_DIRECTORY="$SCRIPTS_DIRECTORY/dependencies"  # All Scripts Gerneral Dependencies
+#   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
 ShortLogSeconds=60	#Shorter log notetion for anything less than this time.
 DoNotLogSeconds=3	#Will not log if down for less than X secionds.
-LogDirectoy="$(nvram get usb_disk_main)/active_system/archives/internet_outage_logs"
+LogDirectoy="$(dirname "$(dirname "$SCRIPT_DIRECTORY")")/archives/internet_outage_logs"  #"$(nvram get usb_disk_main)/active_system/archives/internet_outage_logs"
 LogFilename="internet_outage_log"
 ISP="COX Business 1year - 15mb Down / 3mb Up"
 ZipCode="73013"
-# ----------------------------------------------
+#   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
 LogLocation=$LogDirectoy"/"$LogFilename"_"$(date +%Y-%m_%B)".txt"
 ADDRESS="$1"
 LED="$2"
@@ -18,20 +21,12 @@ DownStateTimeSec=1  # DownStateTimeSec=$(date +%s)
 DownStateTime="Start of Script"
 lastConState="Up"
 
+# [# Included Libraries & Scripts #] --------------------------------------------------------------------------------------
+source "$SCRIPTS_DEPENDENCIES_DIRECTORY/color_text_functions.sh" # Include Color Functions
+#source "$SCRIPTS_DEPENDENCIES_DIRECTORY/color_text_functions-nocolor.sh"  # Include Non-Color Functions
 
 # Functions ------------------------------------
 checkFolder() { [ -d "$@" ] && echo "$(BLU "Folder Exists: $@")" || (echo "$(MAG "Making Folder: $@")"; mkdir -p "$@"); } #CheckFolder v3 - 2011/02/20
-
-# COLOR( "Your Text" )
-BLK() { echo -e "\033[30;40;1m$@\033[0m"; }
-RED() { echo -e "\033[31;40;1m$@\033[0m"; }
-GRN() { echo -e "\033[32;40;1m$@\033[0m"; }
-YEL() { echo -e "\033[33;40;1m$@\033[0m"; }
-BLU() { echo -e "\033[34;40;1m$@\033[0m"; }
-MAG() { echo -e "\033[35;40;1m$@\033[0m"; }
-CYN() { echo -e "\033[36;40;1m$@\033[0m"; }
-WHT() { echo -e "\033[37;40;1m$@\033[0m"; }
-WRN() { echo -e "\033[31;40;1m/\033[33;40;1m!\033[31;40;1m\\ \033[33;40;1mWARNING:\033[37;40;1m $@ \033[31;40;1m/\033[33;40;1m!\033[31;40;1m\ \\033[0m"; }
 
 logPrepair()
 {
@@ -194,6 +189,7 @@ ResetWANAdress()
 # Varable for checking if script is already running.
 BLK "$TITLE | $(WHT IP:) $(BLU $ADDRESS) $(BLK "|") $(WHT LED:) $(MAG $LED)"
 logger -t WANStatus "$TITLE | IP: $ADDRESS | LED: $LED"
+logPrepair  # Setup Log File & Log Header
 SCRIPT_STATUS=$(ps -w | grep -v $$ | grep `basename $0` | grep "$ADDRESS" | grep -v "grep" | wc -l)
 # Write State to temp file for LCD Scree Readout
 # YEL "Writing State $(GRN "Up") $(BLK "to Wan Status Log:") $(WHT "/tmp/wan_status.txt")"
@@ -208,7 +204,7 @@ if [ "$ADDRESS" != "${ADDRESS/0.0.0.0/}" ] || [ "$ADDRESS" != "${ADDRESS/192.168
 	ConectionState "Up" "Down"
 fi
 
-# Main ------------------------------------------
+# [# Main #] --------------------------------------------------------------------------------------
 sleep 1
 if [ "$SCRIPT_STATUS" -le "2"  ]; then # Checking if script is already running.
 	YEL "Pinging $(BLK with a wait time of) $(WHT "1 second(s)") $(BLK at) $(WHT 1 count),\n $(BLK "shorter notes of connection drop of less than") $(WHT "$ShortLogSeconds second(s)"),\n $(BLK "will not log for less than") $(WHT "$DoNotLogSeconds second(s)")." 
