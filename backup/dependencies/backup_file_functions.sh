@@ -1,7 +1,7 @@
 ScriptInfo_backup_file_functions() {
-SCRIPT_NAME="Backup File"; SCRIPT_VERSION="2.1"; SCRIPT_DATE="2014/02/01"; SCRIPT_AUTHER="Austin Saint Aubin"; SCRIPT_AUTHER_CONTACT="AustinSaintAubin@gmail.com"
+SCRIPT_NAME="Backup File"; SCRIPT_VERSION="2.2"; SCRIPT_DATE="2014/02/01"; SCRIPT_AUTHER="Austin Saint Aubin"; SCRIPT_AUTHER_CONTACT="AustinSaintAubin@gmail.com"
 SCRIPT_DESCRIPTION="Used to backup a single file"
-SCRIPT_TITLE="Dependency: $SCRIPT_NAME - v$SCRIPT_VERSION - $SCRIPT_DATE - $SCRIPT_AUTHER ($SCRIPT_AUTHER_CONTACT) \n   ⊢ Description: $SCRIPT_DESCRIPTION"
+SCRIPT_TITLE="Dependency: $SCRIPT_NAME - v$SCRIPT_VERSION - $SCRIPT_DATE - $SCRIPT_AUTHER ($SCRIPT_AUTHER_CONTACT) \n   ∟ Description: $SCRIPT_DESCRIPTION"
 echo -e " $(YEL "▶︎") $SCRIPT_TITLE"; }
 # -------------------------------------------------------------------------------------------------
 # Initialisation: sh "/../backup_file_functions.sh" "SCRIPTS_DEPENDENCIES_DIRECTORY (Glodal)" "SCRIPT_DIRECTORY (Spacific)"
@@ -12,6 +12,9 @@ echo -e " $(YEL "▶︎") $SCRIPT_TITLE"; }
 # =================================================================================================
 # Check if this script is already loaded
 if [ -z $script_loaded_backup_file_functions ]; then
+	# Output Script Title
+	ScriptInfo_backup_file_functions
+	
 	# [# Global Static Variables #]
 	SCRIPT_DIRECTORY="$(dirname $0)"  # This Script Sets Specific Directory (shows root most script directory, so if a script sources this script then this script will not output its directory... )
 	SCRIPT_DEPENDENCIES_DIRECTORY="$SCRIPT_DIRECTORY"  # This Script Sets Specific Dependencies
@@ -21,24 +24,24 @@ if [ -z $script_loaded_backup_file_functions ]; then
 	
 	# [# Read Passed Varables #] --------------------------------------------------------------------------------------
 	# Set Scripts Dependencies Directory (Glodal)
-	echo -ne " ⊢ Scripts Dependencies Directory (Glodal)"
+	echo -ne " ∟ Scripts Dependencies Directory (Glodal)"
 	if [ -z "$1" ]; then 
 		echo "  [ NOT Passed ]"
 	else
 		echo "  [ Passed ]"
 		SCRIPTS_DEPENDENCIES_DIRECTORY="$1"
 	fi
-	echo "   ⊢ Using: $SCRIPTS_DEPENDENCIES_DIRECTORY"
+	echo "   ∟ Using: $SCRIPTS_DEPENDENCIES_DIRECTORY"
 	
 	# Set Scripts Dependencies Directory (Spacific)
-	echo -ne " ⊢ Script Dependencies Directory (Spacific) "
+	echo -ne " ∟ Script Dependencies Directory (Spacific) "
 	if [ -z "$2" ]; then 
 		echo " [ NOT Passed ]"
 	else
 		echo " [ Passed ]"
 		SCRIPT_DEPENDENCIES_DIRECTORY="$2"
 	fi
-	echo "   ⊢ Using: $SCRIPT_DEPENDENCIES_DIRECTORY"
+	echo "   ∟ Using: $SCRIPT_DEPENDENCIES_DIRECTORY"
 	
 	# [# Included Libraries & Scripts #] --------------------------------------------------------------------------------------
 	source "$SCRIPTS_DEPENDENCIES_DIRECTORY/files_and_folder_functions.sh" "$SCRIPTS_DEPENDENCIES_DIRECTORY"  # Include File & Folder Functions
@@ -48,9 +51,6 @@ if [ -z $script_loaded_backup_file_functions ]; then
 	# ALL SOURCED & INCLUDED
 	
 	# [# Main Function #] --------------------------------------------------------------------------------------
-	# Output Script Title
-	ScriptInfo_backup_file_functions
-	
 	backupFile()
 	{ # backupFile "backup_task_name" "backup_source_file_path" "backup_destination_directory" "backup_destination_filename_prefix" "backup_destination_filename_suffix" "backup_retention_number" "backup_note"
 		# [# Read Passed Varables #] --------------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ if [ -z $script_loaded_backup_file_functions ]; then
 			YEL "Backup Task Name $(WHT "[") $(GRN "Passed") $(WHT "]")"
 			backup_task_name="$1"
 		fi
-		BLU "⊢ Using: $(WHT "$backup_task_name")"
+		BLU "∟ Using: $(WHT "$backup_task_name")"
 		
 		# Set Backup Source File Path
 		if [ -z "$2" ]; then 
@@ -81,7 +81,7 @@ if [ -z $script_loaded_backup_file_functions ]; then
 			YEL "Backup Source File Path $(WHT "[") $(GRN "Passed") $(WHT "]")"
 			backup_source_file_path="$2"
 		fi
-		BLU "⊢ Using: $(WHT "$backup_source_file_path")"
+		BLU "∟ Using: $(WHT "$backup_source_file_path")"
 		
 		# Set Backup Root Destination Directory
 		if [ -z "$3" ]; then 
@@ -90,7 +90,7 @@ if [ -z $script_loaded_backup_file_functions ]; then
 			YEL "Backup Root Destination Directory $(WHT "[") $(GRN "Passed") $(WHT "]")"
 			backup_destination_directory="$3"
 		fi
-		BLU "⊢ Using: $(WHT "$backup_destination_directory")"
+		BLU "∟ Using: $(WHT "$backup_destination_directory")"
 		
 		# Set Backup Destination Filename Prefix
 		if [ -z "$4" ]; then 
@@ -99,7 +99,7 @@ if [ -z $script_loaded_backup_file_functions ]; then
 			YEL "Backup Destination Filename Prefix $(WHT "[") $(GRN "Passed") $(WHT "]")"
 			backup_destination_filename_prefix="$4"
 		fi
-		BLU "⊢ Using: $(WHT "$backup_destination_filename_prefix")"
+		BLU "∟ Using: $(WHT "$backup_destination_filename_prefix")"
 		
 		# Set Backup Note ( Is put on Destination File)
 		if [ -z "$5" ]; then 
@@ -108,7 +108,7 @@ if [ -z $script_loaded_backup_file_functions ]; then
 			YEL "Backup Note $(WHT "[") $(GRN "Passed") $(WHT "]")"
 			backup_note="$5"
 		fi
-		BLU "⊢ Using: $(WHT "$backup_note")"
+		BLU "∟ Using: $(WHT "$backup_note")"
 		
 		# Set Backup Destination Filename Suffix
 		if [ -z "$6" ]; then 
@@ -117,7 +117,7 @@ if [ -z $script_loaded_backup_file_functions ]; then
 			YEL "Backup Destination Filename Suffix $(WHT "[") $(GRN "Passed") $(WHT "]")"
 			backup_destination_filename_suffix="$6"
 		fi
-		BLU "⊢ Using: $(WHT "$backup_destination_filename_suffix")"
+		BLU "∟ Using: $(WHT "$backup_destination_filename_suffix")"
 		
 		# Set Number of Backups to Keep (Of same Prefix & Suffix in Destination Directory)
 		if [ -z "$7" ]; then 
@@ -126,7 +126,7 @@ if [ -z $script_loaded_backup_file_functions ]; then
 			YEL "Number of Backups to Keep $(WHT "[") $(GRN "Passed") $(WHT "]")"
 			backup_retention_number="$7"
 		fi
-		BLU "⊢ Using: $(WHT "$backup_retention_number")"
+		BLU "∟ Using: $(WHT "$backup_retention_number")"
 		
 		# [# Main #] --------------------------------------------------------------------------------------
 		# [# Variables #]

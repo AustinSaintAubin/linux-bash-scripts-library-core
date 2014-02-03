@@ -1,7 +1,7 @@
 ScriptInfo_files_and_folder_functions() {
-SCRIPT_NAME="Files & Folders Functions"; SCRIPT_VERSION="1.2"; SCRIPT_DATE="2014/02/01"; SCRIPT_AUTHER="Austin Saint Aubin"; SCRIPT_AUTHER_CONTACT="AustinSaintAubin@gmail.com"
+SCRIPT_NAME="Files & Folders Functions"; SCRIPT_VERSION="1.3"; SCRIPT_DATE="2014/02/01"; SCRIPT_AUTHER="Austin Saint Aubin"; SCRIPT_AUTHER_CONTACT="AustinSaintAubin@gmail.com"
 SCRIPT_DESCRIPTION="Script Dependency, used to help with manipulating files & folders"
-SCRIPT_TITLE="Dependency: $SCRIPT_NAME - v$SCRIPT_VERSION - $SCRIPT_DATE - $SCRIPT_AUTHER ($SCRIPT_AUTHER_CONTACT) \n   ⊢ Description: $SCRIPT_DESCRIPTION"
+SCRIPT_TITLE="Dependency: $SCRIPT_NAME - v$SCRIPT_VERSION - $SCRIPT_DATE - $SCRIPT_AUTHER ($SCRIPT_AUTHER_CONTACT) \n   ∟ Description: $SCRIPT_DESCRIPTION"
 echo -e " $(YEL "▶︎") $SCRIPT_TITLE"; }
 # -------------------------------------------------------------------------------------------------
 # Initialisation: sh "/../dependencies/files_and_folder_functions.sh" "SCRIPTS_DEPENDENCIES_DIRECTORY (Glodal)"
@@ -21,14 +21,14 @@ if [ -z $script_loaded_files_and_folder_functions ]; then
 	
 	# [# Read Passed Varables #] --------------------------------------------------------------------------------------
 	# Set Scripts Dependencies Directory (Glodal)
-	echo -ne " ⊢ Scripts Dependencies Directory (Glodal)"
+	echo -ne " ∟ Scripts Dependencies Directory (Glodal)"
 	if [ -z "$1" ]; then 
 		echo "  [ NOT Passed ]"
 	else
 		echo "  [ Passed ]"
 		SCRIPTS_DEPENDENCIES_DIRECTORY="$1"
 	fi
-	echo "   ⊢ Using: $SCRIPTS_DEPENDENCIES_DIRECTORY"
+	echo "   ∟ Using: $SCRIPTS_DEPENDENCIES_DIRECTORY"
 	
 	# [# Included Libraries & Scripts #] --------------------------------------------------------------------------------------
 	source "$SCRIPTS_DEPENDENCIES_DIRECTORY/color_text_functions.sh" # Include Color Functions
