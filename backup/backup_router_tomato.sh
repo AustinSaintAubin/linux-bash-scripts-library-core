@@ -1,5 +1,5 @@
 ScriptInfo_backup_router() {
-SCRIPT_NAME="Tomato Router Backup Script"; SCRIPT_VERSION="2.6"; SCRIPT_DATE="2014/02/02"; SCRIPT_AUTHER="Austin Saint Aubin"; SCRIPT_AUTHER_CONTACT="AustinSaintAubin@gmail.com"
+SCRIPT_NAME="Tomato Router Backup Script"; SCRIPT_VERSION="2.7"; SCRIPT_DATE="2014/02/09"; SCRIPT_AUTHER="Austin Saint Aubin"; SCRIPT_AUTHER_CONTACT="AustinSaintAubin@gmail.com"
 SCRIPT_DESCRIPTION="Selctively backup everything on your tomato router"
 SCRIPT_TITLE="$SCRIPT_NAME - v$SCRIPT_VERSION - $SCRIPT_DATE - $SCRIPT_AUTHER ($SCRIPT_AUTHER_CONTACT) \n   ∟ Description: $SCRIPT_DESCRIPTION"
 echo -e " $(YEL "▶︎") $SCRIPT_TITLE"; }
@@ -22,9 +22,9 @@ OS_VERSION_UNDERSCORED=$(nvram get os_version | sed -e 's/ /_/g')
 
 # [# Passed Variables Defaults #]
 main_backup_destination_directory_name_prefix="tomato_router_backup"
+main_backup_destination_directory_name_suffix=""
 main_backup_destination_directory_root="$(dirname "$(dirname "$SCRIPTS_DIRECTORY")")/backups"
-main_backup_destination_directory_path="$main_backup_destination_directory_root/$main_backup_destination_directory_name_prefix"_"$(date +%Y-%m-%d_%H%M%S)"_"($OS_VERSION_UNDERSCORED)" # _$(date +%Y-%m-%d_%H%M%S)_($OS_VERSION_UNDERSCORED)"
-main_backup_retention_number=30  # Number of backups to keep
+main_backup_retention_number=120  # Number of backups to keep
 main_backup_note="$OS_VERSION_UNDERSCORED"
 main_backup_type="2"  # Backup Type ( limited(1)|default(2)|full(3) )
 
@@ -64,11 +64,14 @@ fi
 echo -ne "   ∟ Using: ($main_backup_type) = "
 case $main_backup_type in
 	1)  # Limited Backup
-		MAG "Limited Backup";;
+		MAG "Limited Backup"
+		main_backup_destination_directory_name_suffix="-LimitedBackup";; #  append "-LimitedBackup" to Backup Destination Path
 	2) # Standard (Default) Backup
-		GRN "Standard (Default) Backup";;
+		GRN "Standard (Default) Backup"
+		main_backup_destination_directory_name_suffix="-StandardBackup";; #  append "-StandardBackup" to Backup Destination Path
 	3) # Full Backup
-		RED "Full Backup";;
+		RED "Full Backup"
+		main_backup_destination_directory_name_suffix="-FullBackup";; #  append "-FullBackup" to Backup Destination Path
 	*) # catch all
 		WRN "ERROR";;
 esac
@@ -78,8 +81,12 @@ WHT "[# Running Backups #]" # --------------------------------------------------
 # Output Script Title
 ScriptInfo_backup_router
 
+# Set Destination Path
+main_backup_destination_directory_path="$main_backup_destination_directory_root/$main_backup_destination_directory_name_prefix"_"$(date +%Y-%m-%d_%H%M%S)"_"($OS_VERSION_UNDERSCORED)$main_backup_destination_directory_name_suffix" # _$(date +%Y-%m-%d_%H%M%S)_($OS_VERSION_UNDERSCORED)"
+
 # Purge/Cleanup Old Backups
-cleanupFolder "$main_backup_destination_directory_root" $main_backup_retention_number ".*$main_backup_destination_directory_name_prefix.*$main_backup_destination_directory_name_suffix"
+#cleanupFolder "$main_backup_destination_directory_root" $main_backup_retention_number ".*$main_backup_destination_directory_name_prefix.*$main_backup_destination_directory_name_suffix"  # will filter with main_backup_destination_directory_name_suffix
+cleanupFolder "$main_backup_destination_directory_root" $main_backup_retention_number ".*$main_backup_destination_directory_name_prefix.*"
 
 WHT "[# Starting Backups #]" # --------------------------------------------------------------------------------------
 backupSysinfo "Backup System Information" "$main_backup_destination_directory_path" "sysinfo_" "$main_backup_note" ".txt" "$main_backup_retention_number"
@@ -96,12 +103,12 @@ if [ $main_backup_type -ge 2 ]; then
 	backupFile "System Log" "/tmp/var/log/messages" "$main_backup_destination_directory_path" "syslog_" "$main_backup_note" ".log" "$main_backup_retention_number"
 	backupFile "Web Usage Domains" "/proc/webmon_recent_domains" "$main_backup_destination_directory_path" "webmon_recent_domains_" "$main_backup_note" ".txt" "$main_backup_retention_number"
 	backupFile "Web Usage Searches" "/proc/webmon_recent_searches" "$main_backup_destination_directory_path" "webmon_recent_searches_" "$main_backup_note" ".txt" "$main_backup_retention_number"
-	backupFolder "Scripts Backup (Temp)" "/tmp/*.sh" "" "$main_backup_destination_directory_path" "scripts_backups_tmp_" "" "" "$main_backup_retention_number"
+	backupFolder "Scripts Backup (Temp)" "/tmp/*.sh" "" "$main_backup_destination_directory_path" "scripts_backups_tmp_" "$main_backup_note" "" "$main_backup_retention_number"
 fi
 
 # Full Backup
 if [ $main_backup_type -ge 3 ]; then
-	backupFolder "Active System Backup" "-r" "$(dirname "$(dirname "$SCRIPT_DIRECTORY")")/" "$main_backup_destination_directory_path" "active_system_backup_" "" "" "$main_backup_retention_number"
+	backupFolder "Active System Backup" "-r" "$(dirname "$(dirname "$SCRIPT_DIRECTORY")")/" "$main_backup_destination_directory_path" "active_system_backup_" "$main_backup_note" "" "$main_backup_retention_number"
 
 	backupArchive "Optware" "/opt" "$main_backup_destination_directory_path" "optware_" "$main_backup_note" "" "$main_backup_retention_number"
 	### To Extract the Optware Archive:		http://www.dd-wrt.com/wiki/index.php/Optware#.2Fopt_backup

@@ -1,0 +1,30 @@
+# Update Hostname and Related Files
+# Written 2013/05/04   By: Austin Saint Aubin
+# sudo sh change_hostname.sh
+# ============================================================================
+
+# == [ Ask for New Hostname ] ================================================
+read -p "New Hostname: " NEW_HOSTNAME
+
+# == [ Do the work ] ================================================
+# Read old hostname into var
+OLD_HOSTNAME="$(hostname)"
+
+# Change hostname file
+#sudo echo "$NEW_HOSTNAME" > /etc/hostname  # Get: -bash: sudo: Permission denied
+sudo sed -i "s/$OLD_HOSTNAME/$NEW_HOSTNAME/g" /etc/hostname
+
+# Update Hostname
+sudo /etc/init.d/hostname.sh start
+
+# Change Hostname in /etc/hosts file
+sudo sed -i "s/$OLD_HOSTNAME/$NEW_HOSTNAME/g" /etc/hosts
+
+# Output to user
+echo "Old Hostname: $OLD_HOSTNAME"
+echo "Current Hostname: $(hostname)"
+echo --[ /etc/hostname ]--------------------------
+cat /etc/hostname
+echo --[ /etc/hosts ]-----------------------------
+cat /etc/hosts
+echo ---------------------------------------------
