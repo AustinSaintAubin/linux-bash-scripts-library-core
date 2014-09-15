@@ -1,6 +1,6 @@
 #!/bin/sh
-# Synology Directory Synchronization Service using RSync - 2014/08/28 - v1.0.0 - Written By: Austin Saint Aubin"
-#  ∟ Description: Sync the changes of SORUCE DIR with DEST DIR using RSync"
+# Bash Script Servicer / Runner - 2014/08/28 - v1.0.0 - Written By: Austin Saint Aubin"
+#  ∟ Description: Will run a bash script as a service recursively if needed."
 # Link to this Script: 
 # -------------------------------------------------------------------------------------------------
 # General Usage: sh "/.../bash_script_servicer.sh" "/../SCRIPT.sh" MODE LOOP_TIME
