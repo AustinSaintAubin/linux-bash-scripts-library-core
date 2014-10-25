@@ -1,5 +1,10 @@
 linux-bash-scripts-core-library
 ===============================
+This scripting library is a colimation of many bash scrips that will allow you to do many things with... more ease.
+
+
+linux-bash-scripts-library-core / backup / backup_router_tomato.sh
+==================================================================
 This is a script that will back up all of your routers settings, logs, NVRAM data, bandwidth, web usage, sysinfo and more. It is very useful if you often make changes to your router and want the reassurance that your settings are being backed up. Their is nothing worse than doing a 30/30/30 reset and then thinking "…did I write down my settings…". Use this script if you would like to have your router back itself up to a usb storage device on a regular basis by using the scheduler.
 
 #### Features
